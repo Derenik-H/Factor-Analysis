@@ -55,7 +55,7 @@ as_tibble(Lout) %>%
 
 ggsave("figures/factor_loadings_posterior.png")
 
-as_tibble(Pout) %>% 
+as_tibble(1 /  Pout) %>% 
   pivot_longer(everything()) %>% 
   ggplot(aes(name, value)) +
   geom_boxplot() +

@@ -79,7 +79,7 @@ for (iter in 1:Gtot) {
   bp <- dj + 0.5 * t((Y - eta %*% t(Ls)) ^ 2) %*% matrix(1, n, 1)
   
   # error precision matrix
-  Pe <- diag(rgamma(p, ae, be), nrow = p, ncol = p) 
+  Pe <- diag(rgamma(p, ap, bp), nrow = p, ncol = p) 
   
   # Step 5 - Recalculate original factor loadings and save sampled values
   L <- Ls
