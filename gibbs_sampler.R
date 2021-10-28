@@ -24,17 +24,17 @@ Ls[1:km, 1:km] <- diag(km)
 
 # MCMC parameters and arrays ----------------------------------------------
 
-Gtot  <- 25000 # total number of MCMC iterations
-Gburn <- 5000  # burn-in for Gibbs
+n_sim     <- 25000 # total number of MCMC iterations
+n_burn_in <- 5000  # burn-in for Gibbs
 
 # Define arrays for saving output
-Lout <- matrix(0, Gtot - Gburn, p * km) # for Lambda
-Pout <- matrix(0, Gtot - Gburn, p)      # for Sigma^(-1)
-Oout <- matrix(0, Gtot - Gburn, p * p)  # for Omega
+Lout <- matrix(0, n_sim - n_burn_in, p * km) # for Lambda
+Pout <- matrix(0, n_sim - n_burn_in, p)      # for Sigma^(-1)
+Oout <- matrix(0, n_sim - n_burn_in, p * p)  # for Omega
 
 # Sample from full conditionals -------------------------------------------
 
-for (iter in 1:Gtot) {
+for (iter in 1:n_sim) {
   
   # Step 1 - update latent factors
   
@@ -92,15 +92,15 @@ for (iter in 1:Gtot) {
   
   L <- L %*% sqrt(solve(Pl))
   
-  if (iter > Gburn) {
-    Lout[iter - Gburn, ] <- c(L)
-    Pout[iter - Gburn, ] <- diag(Pe)
-    Oout[iter - Gburn, ] <- c(L %*% t(L) + solve(Pe))
+  if (iter > n_burn_in) {
+    Lout[iter - n_burn_in, ] <- c(L)
+    Pout[iter - n_burn_in, ] <- diag(Pe)
+    Oout[iter - n_burn_in, ] <- c(L %*% t(L) + solve(Pe))
   }
   
-  if (iter %% 1000 == 0 & iter <= Gburn) {
+  if (iter %% 1000 == 0 & iter <= n_burn_in) {
     cat(paste0("Iteration: ", iter, " (burn in).\n"))
-  } else if (iter %% 1000 == 0 & iter > Gburn) {
+  } else if (iter %% 1000 == 0 & iter > n_burn_in) {
     cat(paste0("Iteration: ", iter, " (sampling).\n"))
   }
 }
